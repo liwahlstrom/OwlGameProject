@@ -22,6 +22,8 @@ public class SceneFrame extends JComponent {
     private boolean visible;
     private Image owlImage;
     private int imageSize;
+    private int coin = 0;
+
 
 
     public SceneFrame(Owl owl) {
@@ -36,10 +38,12 @@ public class SceneFrame extends JComponent {
                 if (e.getX() >= x && e.getX() <= x + size && e.getY() >= y && e.getY() <= y + size) {
 
                     playSound(owl.filePaths[owl.getValueFromMood()]);
+                    coin++;
                 }
                 Random rand = new Random();
             }
         });
+
     }
 
 
@@ -48,14 +52,14 @@ public class SceneFrame extends JComponent {
         super.paintComponent(g);
         if (visible) {
 
-            g.setColor(new Color(  52,  210,  86));
+            g.setColor(new Color(52, 210, 86));
             g.fillRect(0, 0, getWidth(), getHeight());
 
-            g.setColor(new Color(39,    144,    22
+            g.setColor(new Color(39, 144, 22
             ));
             g.fillRect(0, 0, getWidth(), 70);
 
-            g.setColor(new Color(39,    144,    22));
+            g.setColor(new Color(39, 144, 22));
             g.fillRect(0, getHeight() - 100, getWidth(), 100); // Draw a rectangle from x=0, y=height-30 to the end of the screen with height=30
 
             String imageFile = "C://Users//wahlstrom.li//Downloads//percyliv.gif";
@@ -98,13 +102,13 @@ public class SceneFrame extends JComponent {
 
 
             String borderFile = "C://Users//wahlstrom.li//Downloads//Border.gif";
-            try{
+            try {
                 BufferedImage borderimage = ImageIO.read((new File(borderFile)));
                 g.drawImage(borderimage, 20, 150, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Font myFont = new Font ("Courier New", 1, 15);
+            Font myFont = new Font("Courier New", 1, 15);
             g.setFont(myFont);
             g.setColor(Color.BLACK);
             g.drawString("100%", 230, 170);
@@ -113,21 +117,21 @@ public class SceneFrame extends JComponent {
 
 
             String coinFile = "C://Users//wahlstrom.li//Downloads//Coins.gif";
-            try{
+            try {
                 BufferedImage coinImage = ImageIO.read(new File(coinFile));
                 g.drawImage(coinImage, 1200, 80, null);
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             Font coinFont = new Font("TimesRoman", 1, 20);
             g.setFont(coinFont);
             g.setColor(Color.BLACK);
-            g.drawString("" + "$", 1150, 120);
+            g.drawString(coin + "$", 1150, 120);
 
-            Font titelFont = new Font("Courier", 1 , 30);
+            Font titelFont = new Font("Courier", 1, 30);
             g.setColor(Color.black);
             g.setFont(titelFont);
-            g.drawString("Percy" +  " the owl", getWidth()/2 , 50);
+            g.drawString("Percy" + " the owl", getWidth() / 2, 50);
 
 
             String barFile = "C://Users//wahlstrom.li//Downloads//Healthbar.gif";
@@ -140,16 +144,46 @@ public class SceneFrame extends JComponent {
             }
 
             String foodFile = "C://Users//wahlstrom.li//Downloads//Mat.gif";
-            try{
+            try {
                 BufferedImage foodImage = ImageIO.read(new File(foodFile));
                 g.drawImage(foodImage, 1100, 580, null);
 
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
 
             }
+
+            String nutFile = "C://Users//wahlstrom.li//Downloads//MANDEL.gif";
+            try {
+                BufferedImage nutImage = ImageIO.read(new File(nutFile));
+                g.drawImage(nutImage, 900, 580, null);
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+
+            String baggeFile = "C://Users//wahlstrom.li//Downloads//baiisen.gif";
+            try{
+                BufferedImage nutImage = ImageIO.read(new File(baggeFile));
+                g.drawImage(nutImage, 750, 580, null);
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
         }
+        String musFile = "C://Users//wahlstrom.li//Downloads//mus.gif";
+        try{
+            BufferedImage musImage = ImageIO.read(new File(musFile));
+            g.drawImage(musImage, 600, 580, null);
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+
+
+
+
+
     }
     private static void playSound(String filepath) {
         try {
