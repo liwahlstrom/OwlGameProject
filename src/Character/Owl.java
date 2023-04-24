@@ -9,7 +9,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.sound.sampled.*;
 
-
+// skapa en ny varelse som har en postion x o y, samt hp etc allmänna grejjer
+//extend owl from the creature and add specific data
+// the creature should act like an interface and should be pure abstract same as food
+// cant create a food or creature by itself but trough inheritence can we create classes
 public class Owl {
 
     enum Mood

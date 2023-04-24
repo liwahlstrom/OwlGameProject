@@ -14,7 +14,6 @@ import java.util.Random;
 import java.awt.Color;
 import java.util.random.*;
 import javax.swing.JOptionPane;
-
 import Character.Owl;
 
 public class SceneFrame extends JComponent {
