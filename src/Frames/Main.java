@@ -9,7 +9,7 @@ import Character.Owl;
 // få in arv och arv i flera led implemets och extenders
 public class Main {
     public static void main(String[] args) {
-        Owl myOwl = new Owl(); // konstruktor
+        Owl myOwl = new Owl(200,200,200,true,true); // konstruktor
         SceneFrame mySceneFrame = new SceneFrame(myOwl);
         JFrame frame = new JFrame("Owl Scene");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // gör så att programmet avslutas när skärmen stängs ner.

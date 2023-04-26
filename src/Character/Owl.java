@@ -13,7 +13,7 @@ import javax.sound.sampled.*;
 //extend owl from the creature and add specific data
 // the creature should act like an interface and should be pure abstract same as food
 // cant create a food or creature by itself but trough inheritence can we create classes
-public class Owl {
+public class Owl extends Animal{
 
     enum Mood
     {
@@ -51,7 +51,8 @@ public class Owl {
     public String[] filePaths = new String[7];
 
     // constructor
-    public Owl() {
+    public Owl(int _position_X, int _position_Y, int _size, Boolean hasTeeths, Boolean isHostile){
+        super(_position_X, _position_Y, _size, hasTeeths, isHostile);
         hunger = 100;
         happiness = 100;
         position_Y = 200;
@@ -74,9 +75,10 @@ public class Owl {
         filePaths[5] = "Pledsen.wav";
         filePaths[6] = "Ptrott.wav";
         mood = Mood.Arg;
-
-
     }
+
+
+
 
     // methods
     public void move() {

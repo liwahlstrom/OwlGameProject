@@ -23,8 +23,6 @@ public class SceneFrame extends JComponent {
     private int imageSize;
     private int coin = 0;
 
-
-
     public SceneFrame(Owl owl) {
         this.owl = owl;
         this.visible = true;
