@@ -52,7 +52,7 @@ public class Owl extends Animal{
 
     // constructor
     public Owl(int _position_X, int _position_Y, int _size, Boolean hasTeeths, Boolean isHostile){
-        super(_position_X, _position_Y, _size, hasTeeths, isHostile);
+        super(_position_X, _position_Y, _size, hasTeeths, isHostile); // ändra till getter och setters i animal
         hunger = 100;
         happiness = 100;
         position_Y = 200;

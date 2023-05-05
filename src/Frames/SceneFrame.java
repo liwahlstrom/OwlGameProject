@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.util.random.*;
 import javax.swing.JOptionPane;
 import Character.Owl;
+import Character.Food;
 
 public class SceneFrame extends JComponent {
     private Owl owl;
@@ -22,8 +23,25 @@ public class SceneFrame extends JComponent {
     private Image owlImage;
     private int imageSize;
     private int coin = 0;
+    private Boolean foodVisable = false;
 
-    public SceneFrame(Owl owl) {
+    private int foodGUI_x = 1150;
+    private int foodGUI_y = 550;
+
+    private Food[] foodArray =
+           {
+            new Food("C://Users//wahlstrom.li//Downloads//MANDEL.gif", 1440 - 500, 1024 - 450),
+            new Food("C://Users//wahlstrom.li//Downloads//baiisen.gif", 1440 - 650, 1024 - 450),
+            new Food("C://Users//wahlstrom.li//Downloads//mus.gif", 1440 - 800, 1024 - 450)
+           };
+
+
+
+
+
+
+
+    public SceneFrame(Owl owl) throws IOException {
         this.owl = owl;
         this.visible = true;
         this.addMouseListener(new MouseAdapter() {
@@ -49,6 +67,7 @@ public class SceneFrame extends JComponent {
         super.paintComponent(g);
         if (visible) {
 
+            //borders o sånt
             g.setColor(new Color(52, 210, 86));
             g.fillRect(0, 0, getWidth(), getHeight());
 
@@ -59,20 +78,23 @@ public class SceneFrame extends JComponent {
             g.setColor(new Color(39, 144, 22));
             g.fillRect(0, getHeight() - 100, getWidth(), 100); // Draw a rectangle from x=0, y=height-30 to the end of the screen with height=30
 
+            //liv
             String imageFile = "C://Users//wahlstrom.li//Downloads//percyliv.gif";
             BufferedImage image;
+            //läser in liv
             try {
                 image = ImageIO.read(new File(imageFile));
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-
+            //ritar ut liv
             int x = 20;
             int y = 90;
             g.drawImage(image, x, y, null);
 
 
+            // hämtar owlens position
             int owlX = owl.getPosition_X();
             int owlY = owl.getPosition_Y();
             int size = owl.getSize();
@@ -80,39 +102,33 @@ public class SceneFrame extends JComponent {
             try {
                 BufferedImage owlImage = ImageIO.read(new File(owlGifFile));
 
+                // check if the owl is outside the screen
                 if (owlX < 0) {
                     owlX = 0;
                 } else if (owlX + size > getWidth()) {
                     owlX = getWidth() - size;
                 }
-
+                // check if the owl is outside the screen
                 if (owlY < 0) {
                     owlY = 0;
                 } else if (owlY + size > getHeight()) {
                     owlY = getHeight() - size;
                 }
-
+                //draws OWL
                 g.drawImage(owlImage, owlX, owlY, size, size, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-
-            String borderFile = "C://Users//wahlstrom.li//Downloads//Border.gif";
-            try {
-                BufferedImage borderimage = ImageIO.read((new File(borderFile)));
-                g.drawImage(borderimage, 20, 150, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            //some text
             Font myFont = new Font("Courier New", 1, 15);
             g.setFont(myFont);
             g.setColor(Color.BLACK);
-            g.drawString("100%", 230, 170);
             g.drawString("Humör:" + owl.getMoodString(), 20, 220);
             g.drawString("Tap Percy to Pet him!", 20, 580);
+            g.drawString("Food is Visable" + toString(foodVisable), 20, 400);
 
-
+            // Draw the coin image
             String coinFile = "C://Users//wahlstrom.li//Downloads//Coins.gif";
             try {
                 BufferedImage coinImage = ImageIO.read(new File(coinFile));
@@ -120,25 +136,56 @@ public class SceneFrame extends JComponent {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            // Draw the coin count
             Font coinFont = new Font("TimesRoman", 1, 20);
             g.setFont(coinFont);
             g.setColor(Color.BLACK);
             g.drawString(coin + "$", 1150, 120);
-
+            // Draws Rubrik
             Font titelFont = new Font("Courier", 1, 30);
             g.setColor(Color.black);
             g.setFont(titelFont);
             g.drawString("Percy" + " the owl", getWidth() / 2, 50);
 
+            // Draws the food GUI
 
-            String barFile = "C://Users//wahlstrom.li//Downloads//Healthbar.gif";
+            String FoodFile = "C://Users//wahlstrom.li//Downloads//Mat.gif";
             try {
-                BufferedImage barImage = ImageIO.read(new File(barFile));
-
-                g.drawImage(barImage, 20, 150, null);
+                BufferedImage FoodImage = ImageIO.read(new File(FoodFile));
+                g.drawImage(FoodImage, foodGUI_x, foodGUI_y, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
+                //TODO clicking food menu, makes foodVisable false if true etcetera
+
+                // Draws the foods
+            if (foodVisable){
+            for (Food food : foodArray) {
+                int food_x = food.getPosition_X();
+                int food_y = food.getPosition_Y();
+                String foodGifFile = food.getFoodGifFile();
+                try {
+                    BufferedImage foodImage = ImageIO.read(new File(foodGifFile));
+                    g.drawImage(foodImage, food_x, food_y, null);
+                    //debug cords for picture in console
+                    System.out.println("food_x: " + food_x + " food_y: " + food_y);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+                try {
+                    BufferedImage FoodImage = ImageIO.read(new File(FoodFile));
+                    g.drawImage(FoodImage, foodGUI_x, foodGUI_y, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
 
             String foodFile = "C://Users//wahlstrom.li//Downloads//Mat.gif";
             try {
@@ -182,6 +229,15 @@ public class SceneFrame extends JComponent {
 
 
     }
+
+    private String toString(Boolean foodVisable) {
+        if (foodVisable) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+
     private static void playSound(String filepath) {
         try {
             File musicPath = new File(filepath);
