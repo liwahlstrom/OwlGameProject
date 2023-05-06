@@ -30,9 +30,9 @@ public class SceneFrame extends JComponent {
 
     private Food[] foodArray =
            {
-            new Food("C://Users//wahlstrom.li//Downloads//MANDEL.gif", 1440 - 500, 1024 - 450),
-            new Food("C://Users//wahlstrom.li//Downloads//baiisen.gif", 1440 - 650, 1024 - 450),
-            new Food("C://Users//wahlstrom.li//Downloads//mus.gif", 1440 - 800, 1024 - 450)
+            new Food("C://Users//wahlstrom.li//Downloads//MANDEL.gif", 1440 - 500, 1024 - 450, 10),
+            new Food("C://Users//wahlstrom.li//Downloads//baiisen.gif", 1440 - 650, 1024 - 450, 20),
+            new Food("C://Users//wahlstrom.li//Downloads//mus.gif", 1440 - 800, 1024 - 450, 30 )
            };
 
 
@@ -54,13 +54,48 @@ public class SceneFrame extends JComponent {
 
                     playSound(owl.filePaths[owl.getValueFromMood()]);
                     coin++;
+                    // Update the coin display
+                    repaint(1150, 80, 50, 50);
                 }
-                Random rand = new Random();
+
+
+                for (Food food : foodArray) {
+                    // Check if the click was inside the food image
+                    if (e.getX() >= food.getPosition_X() && e.getX() <= food.getPosition_X() +
+                            200 && e.getY() >= food.getPosition_Y() && e.getY() <= food.getPosition_Y() + 200) {
+                        if (foodVisable) { // If the food is visable
+                            foodVisable = false;
+                            if(coin < food.getCoinValue()) //har vi råd??
+                            {
+                                JOptionPane.showMessageDialog(null, "Du har inte råd med denna maten");
+                                break;
+                            }
+                            else //vi har råd
+                            {
+                                coin -= food.getCoinValue(); // Subtract the coin value from the total coins
+                                repaint(1150, 80, 50, 50);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
+                // Check if the click was inside the food image
+                if (e.getX() >= foodGUI_x && e.getX() <= foodGUI_x + 200 && e.getY() >=
+                        foodGUI_y && e.getY() <= foodGUI_y + 200) {
+                    if (foodVisable) {
+                        foodVisable = false;
+                    } else {
+                        //debug print
+                        System.out.println("foodGUI_x: " + foodGUI_x + " foodGUI_y: " + foodGUI_y);
+                        foodVisable = true;
+                    }
+                }
+                // Lägg till liknande kod till de andra knapparna
             }
         });
-
-    }
-
+    };
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -240,17 +275,26 @@ public class SceneFrame extends JComponent {
 
     private static void playSound(String filepath) {
         try {
-            File musicPath = new File(filepath);
-            if (musicPath.exists()) {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInput);
-                clip.start();
-            } else {
-                System.out.println("Can't find file");
+                File musicPath = new File(filepath);
+                if (musicPath.exists()) {
+                    AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioInput);
+                    clip.start();
+                }
+                else {
+                    System.out.println("Can't find file");
+                }
+                }
+            catch (Exception e) {
+                System.out.println(e);
             }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
+             }
 }
+//i would finally like to implement that the picture String imageFile = "C://Users//wahlstrom.li//Downloads//percyliv.gif";
+//            BufferedImage image;  get cut of for every second not fed and gets full again when fed
+//i would also like the hunger to get 1 less for every second and the health is at 60 to begin with and if  the hunger becomes 0 there will be a messege that the owl died
+//how could i make the different foods to have different values that give the owl different values of health
+// how could i make the different foods to have different values that give the owl different values of health
+// with my code?
+// kunna döpa ugglan till det man vill

@@ -2,13 +2,7 @@ package Character;
 
 import Character.Owl;
 
-// varje mat är food en basklass, man kan inte skapa något från food det är bara en abstrakt interface
-// ger olika hp attributer, position, x o y,
-// göra en abstakt klass av food det ska inte gå att göra en klass av food
-//kunna inherita subklasser från food som är en basklass och då så kan subklassen overrida metoder
-//virtuella memberfunctions from the base it can also define its own member data and member functions.
-// speciella attributer egna grejer som inte andra har
-//overrida debug string så att alla får en unik debug string
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,11 +15,16 @@ public class Food {
     private int x;
     private int y;
 
-    public Food(String fileName, int x, int y) throws IOException {
+    private int coinValue;
+
+
+    public Food(String fileName, int x, int y, int coinValue) throws IOException {
         this.image = ImageIO.read(new File(fileName));
         this.FoodGifFile = fileName;
         this.x = x;
         this.y = y;
+        this.coinValue = coinValue;
+
     }
 
     // getters and setters
@@ -40,5 +39,9 @@ public class Food {
     }
     public String getFoodGifFile() {
         return FoodGifFile;
+    }
+
+    public int getCoinValue() {
+        return coinValue;
     }
 }
