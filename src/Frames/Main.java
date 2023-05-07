@@ -28,13 +28,16 @@ public class Main {
             }
             else {rep ++;}
             mySceneFrame.repaint(); // repaintar sceneframe
+
+            //updatera alla grejer på skärmen
             myOwl.update(); // uppdaterar ugglans position och rörelse
+
+            //broms för FPS annars går allt för snabbt
             try { // felhanterar genom att vänta 1/120 av en sekund
-                Thread.sleep(1000/120); // 60 FPS, bestämmer hur snabbt ugglan ska röra sig
+                Thread.sleep(1000/120); // 120 FPS, bestämmer hur snabbt ugglan ska röra sig
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
 
         }
     }

@@ -25,6 +25,7 @@ public class Food {
         this.FoodGifFile = fileName;
         this.x = x;
         this.y = y;
+        this.feedingPoints = feedingPoints;
         this.coinValue = coinValue;
 
     }

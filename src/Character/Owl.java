@@ -24,6 +24,9 @@ public class Owl extends Animal{ // extendar Animal och får dess egenskaper
     private int hunger;
     private int happiness;
     private String name;
+    int beenAlivefor; // in seconds
+
+    int rep = 0;
 
     private Boolean directionUp;
     enum Mood // ger ugglan olika sorters humör
@@ -106,7 +109,10 @@ public class Owl extends Animal{ // extendar Animal och får dess egenskaper
     }
 
     public void feed(Food food) {
-        health += food.getHealth(); // ugglans hälsa ökar med matens hälsa
+        if(health + food.getFeedingPoints() > 100)
+            health = 100;
+        else
+            health += food.getFeedingPoints(); // ugglans hälsa ökar med matens hälsa
     }
 
     public void rest() {
@@ -115,6 +121,30 @@ public class Owl extends Animal{ // extendar Animal och får dess egenskaper
     public void update()
     {
           move(); // uppdaterar ugglans position
+
+          rep++;
+
+          if(rep == 120) //varje sekund
+          {
+              beenAlivefor++;
+
+                if(health > 0) // om ugglan inte är hungrig så minskar hunger
+                {
+                    health-= 3;
+                    //debug console
+                    System.out.println("Hunger: " + health);
+                }
+                else // ugglan är död
+                {
+                    JOptionPane.showMessageDialog(null, "Ugglan dog av hunger, spelet  börjar om");
+                    health = 100; // hälsan sätts till 100
+                    beenAlivefor = 0; // tiden sätts till 0
+                }
+
+
+              rep = 0; // reset timer
+          }
+
 
     }
 
@@ -192,14 +222,8 @@ public class Owl extends Animal{ // extendar Animal och får dess egenskaper
         this.position_Y = position_Y;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
+    public int getHealth() { return health;}
+    public void setHealth(int health) {this.health = health;}
     public int getSpeed() {
         return speed;
     }
@@ -231,6 +255,10 @@ public class Owl extends Animal{ // extendar Animal och får dess egenskaper
     public Mood getMood()
     {
         return this.mood;
+    }
+
+    public int getBeenAlivefor() {
+        return beenAlivefor;
     }
 
     public void setName(String name) {

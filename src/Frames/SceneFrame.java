@@ -30,9 +30,9 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
 
     private Food[] foodArray = // gör så att maten syns på rätt plats, och att det finns tre olika alternativ till mat som är en förenkling så att inte koden upprepas.
             {
-                    new Food("C://Users//wahlstrom.li//Downloads//MANDEL.gif", 1440 - 500, 1024 - 450, 10),
-                    new Food("C://Users//wahlstrom.li//Downloads//baiisen.gif", 1440 - 650, 1024 - 450, 20),
-                    new Food("C://Users//wahlstrom.li//Downloads//mus.gif", 1440 - 800, 1024 - 450, 30)
+                    new Food("C://Users//wahlstrom.li//Downloads//MANDEL.gif", 1440 - 500, 1024 - 450, 10, 25),
+                    new Food("C://Users//wahlstrom.li//Downloads//baiisen.gif", 1440 - 650, 1024 - 450, 20, 50),
+                    new Food("C://Users//wahlstrom.li//Downloads//mus.gif", 1440 - 800, 1024 - 450, 30, 75)
             };
 
 // En IOException är en felsökare som är ditsatt när en I/O operation misslyckas eller störs
@@ -66,6 +66,7 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
                             } else //om man har råd med maten
                             {
                                 coin -= food.getCoinValue(); // tar bort pengar från coin av det värdet som maten man köpt har
+                                owl.feed(food); // kallar på feed metoden i Owl class
                                 repaint(1150, 80, 50, 50); // uppdaterar coin display genom att repainta den på samma ställe som tidigare men med ett nytt värde på coin
                                 break; // avbryter loopen
                             }
@@ -78,7 +79,6 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
                     if (foodVisable) { // om maten syns så kommer den att vara falsk
                         foodVisable = false;
                     } else { // annars kommer den att vara sann
-                        System.out.println("foodGUI_x: " + foodGUI_x + " foodGUI_y: " + foodGUI_y); // skriver ut foodGUI_x och foodGUI_y i konsolen så att maten syns
                         foodVisable = true;
                     }
                 }
@@ -111,18 +111,37 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
                     "C://Users//wahlstrom.li//Downloads//percyliv1.gif"};
             int[][] positions = {{20, 90}, {40, 90}, {60, 90}, {80, 90}}; // x och y positioner för hjärtanen
 
-            for (int i = 0; i < imageFiles.length; i++) { // loopar igenom alla hjärtanen
+            int index;
+            if(owl.getHealth() > 75)
+                index = 0;
+            else if(owl.getHealth() > 50)
+                index = 1;
+            else if (owl.getHealth() > 25)
+                index = 2;
+            else if (owl.getHealth() > 0)
+                index = 3;
+            else
+                index = 4;
+
+            if(index < 4)
+            {
                 BufferedImage image; // Visar bilderna
                 try { // felhanterare
-                    image = ImageIO.read(new File(imageFiles[i])); // läser in bilderna från arrayen
+                    image = ImageIO.read(new File(imageFiles[index])); // läser in bilderna från arrayen
                 } catch (IOException e) { // felhanterare
                     e.printStackTrace(); //
                     return;
                 }
-                int x = positions[i][0]; // x positionen för hjärtanen
-                int y = positions[i][1]; // y positionen för hjärtanen, [1] betyder att det är andra värdet i arrayen
+                int x = positions[index][0]; // x positionen för hjärtanen
+                int y = positions[index][1]; // y positionen för hjärtanen, [1] betyder att det är andra värdet i arrayen
+
+
                 g.drawImage(image, x, y, null); // ritar ut hjärtanen
+
             }
+
+
+
 
             // hämtar owlens position geonom owl klassen
             int owlX = owl.getPosition_X(); // hämtar x - position
@@ -153,7 +172,7 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
             Font myFont = new Font("Courier New", 1, 15);
             g.setFont(myFont);
             g.setColor(Color.BLACK);
-            g.drawString(owl.getName() + "är" + owl.getMoodString(), 20, 220); // berättar vilket humör ugglan har genom att hämta det från owl klassen
+            g.drawString(owl.getMoodString(), 20, 220); // berättar vilket humör ugglan har genom att hämta det från owl klassen
             g.drawString("Klappa ugglan för att få pengar och mata honom!", 20, 580); // förklarar vad spelet går ut på
           //  g.drawString("Food is Visable" + toString(foodVisable), 20, 400); felhanterare
 
@@ -177,7 +196,12 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
             Font titelFont = new Font("Courier", 1, 30); // skapar font
             g.setColor(Color.black); // sätter färg
             g.setFont(titelFont); // sätter font
-            g.drawString("Percy" + " the owl", getWidth() / 2, 50); // ritar ut texten på skärmen
+            g.drawString(" the owl", (getWidth() / 2)-150, 50); // ritar ut texten på skärmen
+
+            // ritar ut hur länge du levt
+
+
+            g.drawString("Survived for: " + owl.getBeenAlivefor() + "s", (getWidth() / 2) + 100, 50); // ritar ut texten på skärmen
 
 
             // Ritar ut mat GUI
@@ -198,7 +222,6 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
                 try {
                     BufferedImage foodImage = ImageIO.read(new File(foodGifFile));
                     g.drawImage(foodImage, food_x, food_y, null); // ritar ut maten på skärmen
-                    System.out.println("food_x: " + food_x + " food_y: " + food_y); //  skriver ut matens position
                 } catch (IOException e) { // felhanterare
                     e.printStackTrace();
                 }
@@ -238,11 +261,3 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
              }
 }
 
-
-// ugglan ska ha en health som är 100 som går ner för varje sekund och till sist dör den när health är 0
-// när health är 0 kommer det upp ett medelande som berättar att uglan är död och då börjar spelet om
-// När ugglans health är 100 ska percyliv visas, 75  percyliv3, 50 percy liv2 och sist 25 percy liv1
-// När man matar ugglan så ökar hjärtanen igen
-// man ska kunna mata ugglan med det man har köpt
-//ugglan ska ha humöret hungrig när health är under 50
-// man ska kunna döpa ugglan till det man vill som sk a
