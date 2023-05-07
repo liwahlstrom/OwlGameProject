@@ -102,129 +102,85 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
             g.setColor(new Color(39, 144, 22));
             g.fillRect(0, getHeight() - 100, getWidth(), 100); // Ritar en rectangle från x=0, y=height-30 till slutet av skärmen med height=30
 
-            //Olika filerna med liv-hjärtan som varierar från 1-4 för att de grafiskt ska kunna minska
-            String imageFile = "C://Users//wahlstrom.li//Downloads//percyliv.gif";
-            BufferedImage image;
-            //läser in liv
-            try {
-                image = ImageIO.read(new File(imageFile));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
+
+            // Bild med hjärtan som representerar ugglans hunger i liv, det finns bilder med 1-4 hjärtar
+            // Pga upprepande kod har filerna och positionerna gjorts till array
+            String[] imageFiles = {"C://Users//wahlstrom.li//Downloads//percyliv.gif",
+                    "C://Users//wahlstrom.li//Downloads//percyliv3.gif",
+                    "C://Users//Wahlstrom.li//Downloads//percyliv2.gif",
+                    "C://Users//wahlstrom.li//Downloads//percyliv1.gif"};
+            int[][] positions = {{20, 90}, {40, 90}, {60, 90}, {80, 90}}; // x och y positioner för hjärtanen
+
+            for (int i = 0; i < imageFiles.length; i++) { // loopar igenom alla hjärtanen
+                BufferedImage image; // Visar bilderna
+                try { // felhanterare
+                    image = ImageIO.read(new File(imageFiles[i])); // läser in bilderna från arrayen
+                } catch (IOException e) { // felhanterare
+                    e.printStackTrace(); //
+                    return;
+                }
+                int x = positions[i][0]; // x positionen för hjärtanen
+                int y = positions[i][1]; // y positionen för hjärtanen, [1] betyder att det är andra värdet i arrayen
+                g.drawImage(image, x, y, null); // ritar ut hjärtanen
             }
-            //ritar ut liv
-            int x = 20;
-            int y = 90;
-            g.drawImage(image, x, y, null);
 
-
-            String imageFile3 = "C://Users//wahlstrom.li//Downloads//percyliv3.gif";
-            BufferedImage image3;
-            //läser in liv
+            // hämtar owlens position geonom owl klassen
+            int owlX = owl.getPosition_X(); // hämtar x - position
+            int owlY = owl.getPosition_Y(); // häntar y - position
+            int size = owl.getSize(); // hämtar ugglans storlek
+            String owlGifFile = "C://Users//wahlstrom.li//Downloads//Percy.gif"; // hämtar bilden på ugglan
             try {
-                image3 = ImageIO.read(new File(imageFile3));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            //ritar ut liv
-            int x3 = 20;
-            int y3 = 90;
-            g.drawImage(image3, x3, y3, null);
+                BufferedImage owlImage = ImageIO.read(new File(owlGifFile)); // läser in bilden på ugglan
 
-
-
-        String imageFile2 = "C://Users//Wahlstrom.li//Downloads//percyliv2.gif";
-        BufferedImage image2;
-        //läser in liv
-        try {
-            image2 = ImageIO.read(new File(imageFile2));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        //ritar ut liv
-        int x2 = 20;
-        int y2 = 90;
-        g.drawImage(image2, x2, y2, null);
-
-    }
-
-    String imageFile1 = "C://Users//wahlstrom.li//Downloads//percyliv1.gif";
-    BufferedImage image1;
-    //läser in liv
-        try {
-        image1 = ImageIO.read(new File(imageFile1));
-    }
-        catch (IOException e)
-
-    {
-        e.printStackTrace();
-        return;
-    }
-    //ritar ut liv
-    int x1 = 20;
-    int y1 = 90;
-        g.drawImage(image1, x1, y1, null);
-
-
-
-
-            // hämtar owlens position
-            int owlX = owl.getPosition_X();
-            int owlY = owl.getPosition_Y();
-            int size = owl.getSize();
-            String owlGifFile = "C://Users//wahlstrom.li//Downloads//Percy.gif";
-            try {
-                BufferedImage owlImage = ImageIO.read(new File(owlGifFile));
-
-                // check if the owl is outside the screen
-                if (owlX < 0) {
+                // kollar om ugglan är utanför skärmen
+                if (owlX < 0) { // om ugglan är utanför skärmen i x led så kommer den att vara 0
                     owlX = 0;
-                } else if (owlX + size > getWidth()) {
+                } else if (owlX + size > getWidth()) { // om ugglan är utanför skärmen i x led så kommer den att vara 0
                     owlX = getWidth() - size;
                 }
-                // check if the owl is outside the screen
-                if (owlY < 0) {
+                if (owlY < 0) { // om ugglan är utanför skärmen i y led så kommer den att vara 0
                     owlY = 0;
-                } else if (owlY + size > getHeight()) {
+                } else if (owlY + size > getHeight()) { // om ugglan är utanför skärmen i y led så kommer den att vara 0
                     owlY = getHeight() - size;
                 }
-                //draws OWL
-                g.drawImage(owlImage, owlX, owlY, size, size, null);
-            } catch (IOException e) {
+
+                g.drawImage(owlImage, owlX, owlY, size, size, null); // ritar ugglan på skärmen
+            } catch (IOException e) { // felhanterare
                 e.printStackTrace();
             }
 
-            //some text
+            //text för spelet
             Font myFont = new Font("Courier New", 1, 15);
             g.setFont(myFont);
             g.setColor(Color.BLACK);
-            g.drawString("Humör:" + owl.getMoodString(), 20, 220);
-            g.drawString("Tap Percy to Pet him!", 20, 580);
-            g.drawString("Food is Visable" + toString(foodVisable), 20, 400);
+            g.drawString(owl.getName() + "är" + owl.getMoodString(), 20, 220); // berättar vilket humör ugglan har genom att hämta det från owl klassen
+            g.drawString("Klappa ugglan för att få pengar och mata honom!", 20, 580); // förklarar vad spelet går ut på
+          //  g.drawString("Food is Visable" + toString(foodVisable), 20, 400); felhanterare
 
-            // Draw the coin image
-            String coinFile = "C://Users//wahlstrom.li//Downloads//Coins.gif";
+            // Ritar coin bilden
+            String coinFile = "C://Users//wahlstrom.li//Downloads//Coins.gif"; // hämtar bilden på myntet
             try {
-                BufferedImage coinImage = ImageIO.read(new File(coinFile));
-                g.drawImage(coinImage, 1200, 80, null);
-            } catch (IOException e) {
+                BufferedImage coinImage = ImageIO.read(new File(coinFile)); // läser in bilden på myntet
+                g.drawImage(coinImage, 1200, 80, null); // ritar ut myntet
+            } catch (IOException e) { // felhantering
                 e.printStackTrace();
             }
-            // Draw the coin count
-            Font coinFont = new Font("TimesRoman", 1, 20);
-            g.setFont(coinFont);
-            g.setColor(Color.BLACK);
-            g.drawString(coin + "$", 1150, 120);
-            // Draws Rubrik
-            Font titelFont = new Font("Courier", 1, 30);
-            g.setColor(Color.black);
-            g.setFont(titelFont);
-            g.drawString("Percy" + " the owl", getWidth() / 2, 50);
 
-            // Draws the food GUI
+            // Ritar hur mycket mynt som finns
+            Font coinFont = new Font("TimesRoman", 1, 20); // skapar en font för myntet
+            g.setFont(coinFont); // sätter fonten
+            g.setColor(Color.BLACK); // sätter färgen på texten
+            g.drawString(coin + "$", 1150, 120); // ritar ut hur mycket mynt som finns på skärmen
 
+
+            // Ritar Rubrik
+            Font titelFont = new Font("Courier", 1, 30); // skapar font
+            g.setColor(Color.black); // sätter färg
+            g.setFont(titelFont); // sätter font
+            g.drawString("Percy" + " the owl", getWidth() / 2, 50); // ritar ut texten på skärmen
+
+
+            // Ritar ut mat GUI
             String FoodFile = "C://Users//wahlstrom.li//Downloads//Mat.gif";
             try {
                 BufferedImage FoodImage = ImageIO.read(new File(FoodFile));
@@ -233,19 +189,17 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
                 e.printStackTrace();
             }
 
-                // Draws the foods
-            if (foodVisable){
-            for (Food food : foodArray) {
-                int food_x = food.getPosition_X();
-                int food_y = food.getPosition_Y();
-                String foodGifFile = food.getFoodGifFile();
+
+            if (foodVisable){ // ritar ut maten av olika slag
+            for (Food food : foodArray) { // får maten från foodarray, food är en instans av food klassen
+                int food_x = food.getPosition_X(); // hämtar x positionen för maten
+                int food_y = food.getPosition_Y(); // hämtar y positionen för maten
+                String foodGifFile = food.getFoodGifFile();// initierar foodGifFile genom att hämta det från food klassen
                 try {
                     BufferedImage foodImage = ImageIO.read(new File(foodGifFile));
-                    g.drawImage(foodImage, food_x, food_y, null);
-                    //debug cords for picture in console
-                    System.out.println("food_x: " + food_x + " food_y: " + food_y);
-
-                } catch (IOException e) {
+                    g.drawImage(foodImage, food_x, food_y, null); // ritar ut maten på skärmen
+                    System.out.println("food_x: " + food_x + " food_y: " + food_y); //  skriver ut matens position
+                } catch (IOException e) { // felhanterare
                     e.printStackTrace();
                 }
             }
@@ -254,85 +208,41 @@ public class SceneFrame extends JComponent { // JComponent är en base class fö
                     BufferedImage FoodImage = ImageIO.read(new File(FoodFile));
                     g.drawImage(FoodImage, foodGUI_x, foodGUI_y, null);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(); // felhantering
+
+                }
+
                 }
 
             }
 
 
-            String foodFile = "C://Users//wahlstrom.li//Downloads//Mat.gif";
-            try {
-                BufferedImage foodImage = ImageIO.read(new File(foodFile));
-                g.drawImage(foodImage, 1100, 580, null);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
-
-            String nutFile = "C://Users//wahlstrom.li//Downloads//MANDEL.gif";
-            try {
-                BufferedImage nutImage = ImageIO.read(new File(nutFile));
-                g.drawImage(nutImage, 900, 580, null);
-            }
-            catch (IOException e){
-                e.printStackTrace();
-            }
-
-            String baggeFile = "C://Users//wahlstrom.li//Downloads//baiisen.gif";
-            try{
-                BufferedImage nutImage = ImageIO.read(new File(baggeFile));
-                g.drawImage(nutImage, 750, 580, null);
-            }
-            catch (IOException e){
-                e.printStackTrace();
-            }
         }
-        String musFile = "C://Users//wahlstrom.li//Downloads//mus.gif";
-        try{
-            BufferedImage musImage = ImageIO.read(new File(musFile));
-            g.drawImage(musImage, 600, 580, null);
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-
-
-
-
-
-
-
-    private String toString(Boolean foodVisable) {
-        if (foodVisable) {
-            return "true";
-        } else {
-            return "false";
-        }
-    }
-
-    private static void playSound(String filepath) {
+        // Metod för att spela upp ljud
+    private static void playSound(String filepath) { // hämtar ljudet från filen
         try {
-                File musicPath = new File(filepath);
+                File musicPath = new File(filepath); // hämtar ljudet från filen
                 if (musicPath.exists()) {
-                    AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioInput);
-                    clip.start();
+                    AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath); // hämtar ljudet från filen
+                    Clip clip = AudioSystem.getClip(); //
+                    clip.open(audioInput); //
+                    clip.start(); //  spelar upp ljudet
                 }
                 else {
                     System.out.println("Can't find file");
                 }
                 }
             catch (Exception e) {
-                System.out.println(e);
+                System.out.println(e); // felhanterare
             }
              }
 }
-//i would finally like to implement that the picture String imageFile = "C://Users//wahlstrom.li//Downloads//percyliv.gif";
-//            BufferedImage image;  get cut of for every second not fed and gets full again when fed
-//i would also like the hunger to get 1 less for every second and the health is at 60 to begin with and if  the hunger becomes 0 there will be a messege that the owl died
-//how could i make the different foods to have different values that give the owl different values of health
-// how could i make the different foods to have different values that give the owl different values of health
-// with my code?
-// kunna döpa ugglan till det man vill
+
+
+// ugglan ska ha en health som är 100 som går ner för varje sekund och till sist dör den när health är 0
+// när health är 0 kommer det upp ett medelande som berättar att uglan är död och då börjar spelet om
+// När ugglans health är 100 ska percyliv visas, 75  percyliv3, 50 percy liv2 och sist 25 percy liv1
+// När man matar ugglan så ökar hjärtanen igen
+// man ska kunna mata ugglan med det man har köpt
+//ugglan ska ha humöret hungrig när health är under 50
+// man ska kunna döpa ugglan till det man vill som sk a

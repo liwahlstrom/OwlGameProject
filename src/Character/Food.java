@@ -15,10 +15,12 @@ public class Food {
     private int x;
     private int y;
 
+    private int feedingPoints;
+
     private int coinValue;
 
 
-    public Food(String fileName, int x, int y, int coinValue) throws IOException {
+    public Food(String fileName, int x, int y, int coinValue, int feedingPoints) throws IOException {
         this.image = ImageIO.read(new File(fileName));
         this.FoodGifFile = fileName;
         this.x = x;
@@ -39,6 +41,9 @@ public class Food {
     }
     public String getFoodGifFile() {
         return FoodGifFile;
+    }
+    public int getFeedingPoints() {
+        return feedingPoints;
     }
 
     public int getCoinValue() {

@@ -9,14 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.sound.sampled.*;
 
-// skapa en ny varelse som har en postion x o y, samt hp etc allmänna grejjer
-//extend owl from the creature and add specific data
-// the creature should act like an interface and should be pure abstract same as food
-// cant create a food or creature by itself but trough inheritence can we create classes
-public class Owl extends Animal{
-
-
-
+public class Owl extends Animal{ // extendar Animal och får dess egenskaper
 
     // instance variables
     private int position_Y;
@@ -24,8 +17,6 @@ public class Owl extends Animal{
 
     private int direction_X;
     private int direction_Y;
-
-    private int z_direction;
     private int size;
     private int speed;
     private int health;
@@ -35,18 +26,16 @@ public class Owl extends Animal{
     private String name;
 
     private Boolean directionUp;
-    enum Mood
+    enum Mood // ger ugglan olika sorters humör
     {
-        Död,
+        Död ,
         Glad,
         Hungrig,
-
-
     }
 
-    private Mood mood;
+    private Mood mood; // initierar humöret
 
-    public String[] filePaths = new String[7];
+    public String[] filePaths = new String[3]; // array med ljudfiler
 
     // constructor
     public Owl(int _position_X, int _position_Y, int _size, Boolean hasTeeths, Boolean isHostile){
@@ -108,15 +97,6 @@ public class Owl extends Animal{
 
 
     public void interact() { // hur ugglan interagerar med andra objekt
-        // If funktionen som gör så att ugglan äter maten om den är i närheten av den
-        if (Math.abs(position_X - 500) < 50 && Math.abs(position_Y - 500) < 50) { // om ugglan är inom 50 pixlar från maten så äter  den
-            hunger += 10; // hunger ökar med 10
-            happiness += 10; // happiness ökar med 10
-        } else { // annars
-            hunger -= 1; // hunger minskar med 1
-            happiness -= 1; // happiness minskar med 1
-        }
-
     }
 
     public void levelUp() {
@@ -125,7 +105,8 @@ public class Owl extends Animal{
     public void improveStats() {
     }
 
-    public void feed() {
+    public void feed(Food food) {
+        health += food.getHealth(); // ugglans hälsa ökar med matens hälsa
     }
 
     public void rest() {
@@ -133,7 +114,7 @@ public class Owl extends Animal{
 
     public void update()
     {
-          move();
+          move(); // uppdaterar ugglans position
 
     }
 
@@ -161,22 +142,22 @@ public class Owl extends Animal{
         this.position_X = position_X;
     }
 
-    public void setMood(int mode)
+    public void setMood(int mode) // sätter ugglans humör
     {
         switch(mode)
         {
 
-            case 0:
+            case 0: // om mode är 0 så är ugglan död och rör sig inte
                 this.mood = Mood.Död;
-                this.speed = 1;
+                this.speed = 0;
                 break;
-            case 1:
+            case 1: // om mode är 1 så är ugglan glad och rör sig snabbt
                 this.mood = Mood.Glad;
                 this.speed = 4;
                 break;
-            case 2:
+            case 2: // om mode är 2 så är ugglan hungrig och rör sig långsamt
                 this.mood = Mood.Hungrig;
-                this.speed = 1;
+                this.speed = 2;
                 break;
 
 
@@ -190,7 +171,7 @@ public class Owl extends Animal{
     }
     public String getMoodString()
     {
-        switch (mood.ordinal())
+        switch (mood.ordinal()) // skriver ut hur ugglan mår beroende på humör
         {
 
             case 0:
