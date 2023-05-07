@@ -15,17 +15,7 @@ import javax.sound.sampled.*;
 // cant create a food or creature by itself but trough inheritence can we create classes
 public class Owl extends Animal{
 
-    enum Mood
-    {
-        JatteLedsen,
-        Arg,
-        Död,
-        Glad,
-        Hungrig,
-        Ledsen,
-        Trott
 
-    }
 
 
     // instance variables
@@ -45,6 +35,14 @@ public class Owl extends Animal{
     private String name;
 
     private Boolean directionUp;
+    enum Mood
+    {
+        Död,
+        Glad,
+        Hungrig,
+
+
+    }
 
     private Mood mood;
 
@@ -60,60 +58,65 @@ public class Owl extends Animal{
         size = 300;
         speed = 2;
         health = 100;
-        fatigue = 100;
         name = "Percy";
         directionUp = true;
         direction_X = speed;
         direction_Y = 0;
 
 
-        filePaths[0] = "Pledledsen.wav";
-        filePaths[1] = "Parg.wav";
-        filePaths[2] = "Psjuk.wav";
-        filePaths[3] = "Pglad.wav";
-        filePaths[4] = "Phungrig.wav";
-        filePaths[5] = "Pledsen.wav";
-        filePaths[6] = "Ptrott.wav";
-        mood = Mood.Arg;
+           // ljudfiler
+        filePaths[0] = "Psjuk.wav";
+        filePaths[1] = "Pglad.wav";
+        filePaths[2] = "Phungrig.wav";
+        mood = Mood.Glad;
     }
 
 
 
 
     // methods
-    public void move() {
-        int screenWidth = 1440;
-        int screenHeight = 1024;
-
+    public void move() { // hur ugglan rör sig
+        int screenWidth = 1440; // skrärmens bredd
+        int screenHeight = 1024; // skärmens höjd
         int distanceToLeft = position_X;
         int distanceToRight = screenWidth - position_X - size;
         int distanceToTop = position_Y;
         int distanceToBottom = screenHeight - position_Y - size;
 
-        if (Math.random() < 0.02) {
-            double angle = Math.random() * 2 * Math.PI;
-            direction_X = (int) (Math.cos(angle) * speed);
-            direction_Y = (int) (Math.sin(angle) * speed);
+        // If funktionen gör så att ugglan rör sig i en random riktning i en konstant hastighet tills den når en kant
+        if (Math.random() < 0.02) { // random generator som bestämmer om ugglan ska byta riktning vilket är en 0.2% chans
+            double angle = Math.random() * 2 * Math.PI; // en random vinkel mellan 0 och 2pi genereras
+            direction_X = (int) (Math.cos(angle) * speed); // riktningen i x-led bestäms av cosinus av vinkeln
+            direction_Y = (int) (Math.sin(angle) * speed); // riktningen i y-led bestäms av sinus av vinkeln och den speed
         }
-
-        if (distanceToLeft < 50) {
-            direction_X = speed;
-        } else if (distanceToRight < 50) {
-            direction_X = -speed;
+// If funktionen som gör så att ugglan inte kan gå utanför skärmen genom att den studsar tillbaka när den når en kant
+        if (distanceToLeft < 50) { // om ugglan är till vänster kant är mindre än 50 pixlar så sätts riktningen åt motsatt håll
+            direction_X = speed; // riktningen i motsatt håll
+        } else if (distanceToRight < 50) { // om ugglan är till höger kant är mindre än 5o pixlar så sätts riktningen i motsatt håll
+            direction_X = -speed; //
         }
-        if (distanceToTop < 50) {
+        if (distanceToTop < 50) { // Gäller dessamma fast för uppe och nere i skärmen alltså i Y-led.
             direction_Y = speed;
-        } else if (distanceToBottom < 50) {
+        } else if (distanceToBottom < 50) { // om ugglan kommer för nära botten
             direction_Y = -speed;
         }
 
-        position_X += direction_X;
-        position_Y += direction_Y;
+        position_X += direction_X; // positionen i x-led uppdateras
+        position_Y += direction_Y; // positionen i y-led uppdateras
 
     }
 
 
-    public void interact() {
+    public void interact() { // hur ugglan interagerar med andra objekt
+        // If funktionen som gör så att ugglan äter maten om den är i närheten av den
+        if (Math.abs(position_X - 500) < 50 && Math.abs(position_Y - 500) < 50) { // om ugglan är inom 50 pixlar från maten så äter  den
+            hunger += 10; // hunger ökar med 10
+            happiness += 10; // happiness ökar med 10
+        } else { // annars
+            hunger -= 1; // hunger minskar med 1
+            happiness -= 1; // happiness minskar med 1
+        }
+
     }
 
     public void levelUp() {
@@ -162,34 +165,21 @@ public class Owl extends Animal{
     {
         switch(mode)
         {
+
             case 0:
-                this.mood = Mood.JatteLedsen;
-                this.speed = 1;
-                break;
-            case 1:
-                this.mood = Mood.Arg;
-                this.speed = 6;
-                break;
-            case 2:
                 this.mood = Mood.Död;
                 this.speed = 1;
                 break;
-            case 3:
+            case 1:
                 this.mood = Mood.Glad;
                 this.speed = 4;
                 break;
-            case 4:
+            case 2:
                 this.mood = Mood.Hungrig;
                 this.speed = 1;
                 break;
-            case 5:
-                this.mood = Mood.Ledsen;
-                this.speed = 1;
-                break;
-            case 6:
-                this.mood = Mood.Trott;
-                this.speed = 0;
-                break;
+
+
 
         }
     }
@@ -202,20 +192,14 @@ public class Owl extends Animal{
     {
         switch (mood.ordinal())
         {
+
             case 0:
-                return "Percy is Really Sad";
-            case 1:
-                return "Percy is Angry";
-            case 2:
                 return "Percy is Dying";
-            case 3:
+            case 1:
                 return "Percy is Happy";
-            case 4:
+            case 2:
                 return "Percy is hungry like a wolf!";
-            case 5:
-                return "Percy is Sad";
-            case 6:
-                return "Percy is Tired!";
+
         }
         return "";
     }
